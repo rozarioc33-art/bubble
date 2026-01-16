@@ -28,7 +28,7 @@ const LobbyPage = () => {
   });
 
   return (
-    <div className="flex flex-col h-full relative">
+    <div className="flex flex-col gap-4 h-full relative">
       {/* Header */}
       <Header
         users={users}
