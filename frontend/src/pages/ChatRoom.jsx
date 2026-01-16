@@ -93,7 +93,7 @@ const ChatRoom = () => {
                   className={`px-4 py-3 rounded-3xl shadow-sm shadow-violet-200/30
     ${
       isMe
-        ? "bg-violet-500 text-white rounded-br-md"
+        ? "bg-gradient-to-br from-violet-400 to-pink-400 text-white rounded-br-md"
         : "bg-violet-50 text-violet-900 rounded-bl-md border border-violet-100"
     }`}
                 >

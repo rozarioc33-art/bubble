@@ -30,19 +30,21 @@ const LobbyPage = () => {
   return (
     <div className="flex h-full">
       {/* Sidebar for desktop */}
-      <div className="hidden md:flex flex-col w-20 border-r border-slate-200 p-4 gap-4 items-center">
+      {/* Sidebar for desktop */}
+      <div className="hidden md:flex flex-col w-20 border-r border-slate-200 items-center py-4 gap-6">
+        {/* App logo */}
+        <div className="h-10 w-10 rounded-full bg-gradient-to-br from-violet-400 to-pink-400 flex items-center justify-center shadow-md">
+          <span className="text-white font-extrabold text-lg">B</span>
+        </div>
+
+        {/* Nav */}
         <button
           className="p-2 rounded-lg hover:bg-slate-100"
           onClick={() => navigate("/")}
         >
           🏠
         </button>
-        <button
-          className="p-2 rounded-lg hover:bg-slate-100"
-          onClick={() => navigate("/new-chat")}
-        >
-          ➕
-        </button>
+
         <button
           className="p-2 rounded-lg hover:bg-slate-100"
           onClick={() => navigate("/profile")}
@@ -60,11 +62,6 @@ const LobbyPage = () => {
           query={query}
           onSearchChange={setQuery}
         />
-
-        {/* Section title */}
-        <div className="px-4">
-          <h2 className="text-lg font-semibold text-slate-700">Chats</h2>
-        </div>
 
         {/* Scrollable Room List */}
         <div className="flex-1 overflow-auto px-4 bg-white border-r border-slate-200">
