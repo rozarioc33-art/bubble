@@ -28,36 +28,88 @@ const LobbyPage = () => {
   });
 
   return (
-    <div className="flex flex-col gap-4 h-full relative">
-      {/* Header */}
-      <Header
-        users={users}
-        currentUser={currentUser}
-        query={query}
-        onSearchChange={setQuery}
-      />
+    <div className="flex h-full">
+      {/* Sidebar for desktop */}
+      <div className="hidden md:flex flex-col w-20 border-r border-slate-200 p-4 gap-4 items-center">
+        <button
+          className="p-2 rounded-lg hover:bg-slate-100"
+          onClick={() => navigate("/")}
+        >
+          🏠
+        </button>
+        <button
+          className="p-2 rounded-lg hover:bg-slate-100"
+          onClick={() => navigate("/new-chat")}
+        >
+          ➕
+        </button>
+        <button
+          className="p-2 rounded-lg hover:bg-slate-100"
+          onClick={() => navigate("/profile")}
+        >
+          👤
+        </button>
+      </div>
 
-      {/* Scrollable Room List */}
-      <div className="flex-1 overflow-auto px-4 bg-white border-r border-slate-200">
-        {filteredRooms.map((room) => {
-          const unreadCount = getUnreadCount(room.id);
+      {/* Main content */}
+      <div className="flex-1 flex flex-col gap-4 h-full relative">
+        {/* Header */}
+        <Header
+          users={users}
+          currentUser={currentUser}
+          query={query}
+          onSearchChange={setQuery}
+        />
 
-          return (
-            <ChatCard
-              key={room.id}
-              room={room}
-              unreadCount={unreadCount}
-              timestamp={room.lastMessageAt}
-              onClick={() => navigate(`/chat/${room.id}`)}
-            />
-          );
-        })}
+        {/* Section title */}
+        <div className="px-4">
+          <h2 className="text-lg font-semibold text-slate-700">Chats</h2>
+        </div>
 
-        {filteredRooms.length === 0 && (
-          <p className="text-sm text-slate-500 text-center mt-6">
-            No chats found
-          </p>
-        )}
+        {/* Scrollable Room List */}
+        <div className="flex-1 overflow-auto px-4 bg-white border-r border-slate-200">
+          {filteredRooms.map((room) => {
+            const unreadCount = getUnreadCount(room.id);
+
+            return (
+              <ChatCard
+                key={room.id}
+                room={room}
+                unreadCount={unreadCount}
+                timestamp={room.lastMessageAt}
+                onClick={() => navigate(`/chat/${room.id}`)}
+              />
+            );
+          })}
+
+          {filteredRooms.length === 0 && (
+            <p className="text-sm text-slate-500 text-center mt-6">
+              No chats found
+            </p>
+          )}
+        </div>
+
+        {/* Bottom nav for mobile */}
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 flex justify-around p-2 md:hidden">
+          <button
+            className="flex-1 p-2 text-center hover:bg-slate-100 rounded-lg"
+            onClick={() => navigate("/")}
+          >
+            🏠
+          </button>
+          <button
+            className="flex-1 p-2 text-center hover:bg-slate-100 rounded-lg"
+            onClick={() => navigate("/new-chat")}
+          >
+            ➕
+          </button>
+          <button
+            className="flex-1 p-2 text-center hover:bg-slate-100 rounded-lg"
+            onClick={() => navigate("/profile")}
+          >
+            👤
+          </button>
+        </div>
       </div>
     </div>
   );

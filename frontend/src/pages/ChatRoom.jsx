@@ -140,18 +140,20 @@ const ChatRoom = () => {
       )}
 
       {/* Input */}
-      <div className="p-3 border-t border-slate-200 bg-white flex gap-2">
+      {/* Input */}
+      <div className="p-3 border-t border-slate-200 bg-white flex gap-2 items-center">
         <input
           value={text}
           onChange={(e) => setText(e.target.value)}
           onKeyDown={handleKeyDown}
-          className="flex-1 border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-          placeholder="Type a message..."
+          className="flex-1 bg-slate-100 border-none rounded-full px-4 py-2 shadow-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-300"
+          placeholder="Type a message… 💬"
         />
 
         <button
           onClick={handleSend}
-          className="bg-violet-600 hover:bg-violet-700 p-2 rounded-lg text-white transition-colors"
+          className="bg-gradient-to-br from-violet-400 to-pink-400
+hover:bg-violet-600 p-3 rounded-full text-white flex items-center justify-center transition-transform hover:scale-105 shadow-md"
         >
           <PaperAirplaneIcon className="w-5 h-5" />
         </button>

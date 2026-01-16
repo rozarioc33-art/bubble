@@ -8,16 +8,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
-export default function Header({ users, currentUser, query, onSearchChange }) {
+export default function Header({ query, onSearchChange }) {
   return (
     <header className="flex items-center justify-between p-4 bg-white shadow z-10">
       <div className="flex items-center gap-3">
-        <Avatar className="h-10 w-10">
-          <AvatarImage src={currentUser.avatarUrl} alt={currentUser.name} />
-          <AvatarFallback>{currentUser.name.slice(0, 1)}</AvatarFallback>
-        </Avatar>
+        <h1 className="text-xl font-bold text-slate-800 tracking-tight">
+          Bubble
+        </h1>
       </div>
 
       <div className="flex items-center gap-2">
