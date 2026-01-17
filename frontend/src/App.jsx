@@ -40,7 +40,7 @@ const ChatLayout = () => {
 
       {/* Profile panel (desktop only) */}
       {isDesktop && isProfileOpen && (
-        <div className="w-[320px] border-l overflow-y-auto">
+        <div className="basis-1/4 max-w-[320px] min-w-[260px] border-l overflow-y-auto">
           <ProfilePage onClose={() => setIsProfileOpen(false)} />
         </div>
       )}
