@@ -7,6 +7,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 const ChatRoom = () => {
   const { id: roomId } = useParams();
+  console.log("id:", roomId);
   const [text, setText] = useState("");
   const { messagesByRoom, sendMessage, markRoomAsRead, rooms, typingByRoom } =
     useChat();

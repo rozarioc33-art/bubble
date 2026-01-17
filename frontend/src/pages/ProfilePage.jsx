@@ -1,8 +1,16 @@
 import React from "react";
 
-const ProfilePage = () => {
+const ProfilePage = ({ onClose }) => {
   return (
-    <div className="h-screen w-screen flex items-center justify-center bg-gray-50">
+    <div className="h-full w-full flex flex-col bg-gray-50">
+      <div className="flex items-center justify-between p-4 border-b">
+        <h2 className="font-semibold text-lg">Profile</h2>
+        {onClose && (
+          <button onClick={onClose} className="p-2 rounded hover:bg-gray-200">
+            ✕
+          </button>
+        )}
+      </div>
       <div className="max-w-md mx-auto p-6">
         {/* Avatar Placeholder */}
         <div className="w-24 h-24 rounded-full bg-gray-200 mb-6 mx-auto flex items-center justify-center">

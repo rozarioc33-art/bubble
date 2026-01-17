@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   BrowserRouter,
   Routes,
@@ -18,6 +18,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 import EmptyChat from "./pages/EmptyChat";
 
 const ChatLayout = () => {
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const isDesktop = useMediaQuery({ minWidth: 768 });
   const { id } = useParams();
 
@@ -26,7 +27,7 @@ const ChatLayout = () => {
       {/* Lobby */}
       {(isDesktop || !id) && (
         <div className="w-full md:basis-1/3 md:shrink-0 border-r overflow-y-auto min-w-0">
-          <LobbyPage />
+          <LobbyPage onOpenProfile={() => setIsProfileOpen(true)} />
         </div>
       )}
 
@@ -34,6 +35,13 @@ const ChatLayout = () => {
       {(isDesktop || id) && (
         <div className="flex-1 flex flex-col overflow-hidden min-w-0">
           <Outlet />
+        </div>
+      )}
+
+      {/* Profile panel (desktop only) */}
+      {isDesktop && isProfileOpen && (
+        <div className="w-[320px] border-l overflow-y-auto">
+          <ProfilePage onClose={() => setIsProfileOpen(false)} />
         </div>
       )}
     </div>
@@ -54,6 +62,7 @@ function App() {
         </Route>
 
         <Route path="/profile" element={<ProfilePage />} />
+
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>

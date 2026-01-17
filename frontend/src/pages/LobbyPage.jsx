@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useMediaQuery } from "react-responsive";
 import Header from "../components/Header";
 import { ChatCard } from "../components/ChatCard";
 import { useChat } from "@/context/ChatContext";
 
-const LobbyPage = () => {
+const LobbyPage = ({ onOpenProfile }) => {
+  const isDesktop = useMediaQuery({ minWidth: 768 });
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
   const { rooms = [], getUnreadCount } = useChat();
@@ -47,7 +49,13 @@ const LobbyPage = () => {
 
         <button
           className="p-2 rounded-lg hover:bg-slate-100"
-          onClick={() => navigate("/profile")}
+          onClick={() => {
+            if (isDesktop) {
+              onOpenProfile();
+            } else {
+              navigate("/profile");
+            }
+          }}
         >
           👤
         </button>
