@@ -4,6 +4,7 @@ import { useMediaQuery } from "react-responsive";
 import Header from "../components/Header";
 import { ChatCard } from "../components/ChatCard";
 import { useChat } from "@/context/ChatContext";
+import { useUser } from "@/context/UserContext";
 
 const LobbyPage = ({ onOpenProfile }) => {
   const isDesktop = useMediaQuery({ minWidth: 768 });
@@ -13,11 +14,7 @@ const LobbyPage = ({ onOpenProfile }) => {
 
   const users = rooms.map((room) => room.user);
 
-  const currentUser = {
-    id: "me",
-    name: "Alex",
-    avatarUrl: "https://github.com/shadcn.png",
-  };
+  const { currentUser } = useUser();
 
   const filteredRooms = rooms.filter((room) => {
     const name = room.user.name.toLowerCase();

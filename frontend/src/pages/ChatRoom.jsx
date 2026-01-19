@@ -61,8 +61,6 @@ const ChatRoom = () => {
       <div className="flex-1 min-h-0 overflow-y-auto px-4 py-6 space-y-4">
         {messages.map((m) => {
           const isMe = m.sender === "me";
-          const avatarLetter = m.senderName?.charAt(0).toUpperCase() || "U";
-
           return (
             <div
               key={m.id}

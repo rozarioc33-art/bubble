@@ -1,7 +1,9 @@
 import React from "react";
 import { PencilIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
+import { useUser } from "@/context/UserContext";
 
 const ProfilePage = ({ onClose }) => {
+  const { currentUser, setCurrentUser } = useUser();
   return (
     <div className="h-full w-full flex flex-col bg-white">
       {/* Header */}
@@ -43,8 +45,12 @@ const ProfilePage = ({ onClose }) => {
               Display name
             </label>
             <input
-              defaultValue="John Doe"
-              className="w-full px-4 py-3 rounded-xl bg-slate-100 focus:outline-none focus:ring-2 focus:ring-violet-300"
+              value={currentUser.name}
+              onChange={(e) =>
+                setCurrentUser({ ...currentUser, name: e.target.value })
+              }
+              className="w-full px-4 py-3 rounded-xl bg-slate-100
+  focus:outline-none focus:ring-2 focus:ring-violet-300"
             />
           </div>
 
@@ -53,15 +59,22 @@ const ProfilePage = ({ onClose }) => {
               Status
             </label>
             <input
-              defaultValue="Available"
-              className="w-full px-4 py-3 rounded-xl bg-slate-100 focus:outline-none focus:ring-2 focus:ring-violet-300"
+              value={currentUser.status}
+              onChange={(e) =>
+                setCurrentUser({ ...currentUser, status: e.target.value })
+              }
+              className="w-full px-4 py-3 rounded-xl bg-slate-100
+  focus:outline-none focus:ring-2 focus:ring-violet-300"
             />
           </div>
         </div>
 
         {/* Actions */}
         <div className="mt-10 space-y-4">
-          <button className="w-full py-3 rounded-xl bg-gradient-to-br from-violet-400 to-pink-400 text-white font-medium hover:opacity-90">
+          <button
+            onClick={onClose}
+            className="w-full py-3 rounded-xl bg-gradient-to-br from-violet-400 to-pink-400 text-white"
+          >
             Save changes
           </button>
 
