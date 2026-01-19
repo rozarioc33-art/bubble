@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { useUser } from "./UserContext";
 
 const ChatContext = createContext();
 
@@ -67,6 +68,7 @@ const DEFAULT_ROOMS = [
 ];
 
 export const ChatProvider = ({ children }) => {
+  const { currentUser } = useUser();
   const [typingByRoom, setTypingByRoom] = useState({});
   const [rooms, setRooms] = useState(() => {
     try {
@@ -116,9 +118,9 @@ export const ChatProvider = ({ children }) => {
       id: Date.now(),
       roomId,
       text,
-      sender: "other",
       senderId: room.user.id,
       senderName: room.user.name,
+      senderAvatar: room.user.avatarUrl,
       timestamp: Date.now(),
       status: "delivered",
     };
@@ -136,8 +138,8 @@ export const ChatProvider = ({ children }) => {
               lastMessage: text,
               lastMessageAt: newMessage.timestamp,
             }
-          : room
-      )
+          : room,
+      ),
     );
   };
 
@@ -146,8 +148,9 @@ export const ChatProvider = ({ children }) => {
       id: Date.now(),
       roomId,
       text,
-      sender: "me",
-      senderName: "You",
+      senderId: currentUser.id,
+      senderName: currentUser.name,
+      senderAvatar: currentUser.avatarUrl,
       timestamp: Date.now(),
       status: "sent",
     };
@@ -165,8 +168,8 @@ export const ChatProvider = ({ children }) => {
               lastMessage: text,
               lastMessageAt: newMessage.timestamp,
             }
-          : room
-      )
+          : room,
+      ),
     );
 
     setTimeout(() => {
@@ -180,7 +183,7 @@ export const ChatProvider = ({ children }) => {
       setMessagesByRoom((prev) => ({
         ...prev,
         [roomId]: prev[roomId].map((m) =>
-          m.id === newMessage.id ? { ...m, status: "delivered" } : m
+          m.id === newMessage.id ? { ...m, status: "delivered" } : m,
         ),
       }));
     }, 1000);
@@ -194,14 +197,14 @@ export const ChatProvider = ({ children }) => {
     setMessagesByRoom((prev) => ({
       ...prev,
       [roomId]: (prev[roomId] || []).map((m) =>
-        m.status === "delivered" ? { ...m, status: "read" } : m
+        m.status === "delivered" ? { ...m, status: "read" } : m,
       ),
     }));
   };
 
   const getUnreadCount = (roomId) => {
     return (messagesByRoom[roomId] || []).filter(
-      (m) => m.sender !== "me" && m.status === "delivered"
+      (m) => m.sender !== "me" && m.status === "delivered",
     ).length;
   };
 

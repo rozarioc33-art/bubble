@@ -1,4 +1,6 @@
+// src/pages/ChatRoom.jsx
 import { useChat } from "@/context/ChatContext";
+import { useUser } from "@/context/UserContext";
 import { useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { PaperAirplaneIcon, CheckIcon } from "@heroicons/react/24/outline";
@@ -7,7 +9,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 const ChatRoom = () => {
   const { id: roomId } = useParams();
-  console.log("id:", roomId);
+  const { currentUser } = useUser();
   const [text, setText] = useState("");
   const { messagesByRoom, sendMessage, markRoomAsRead, rooms, typingByRoom } =
     useChat();
@@ -28,7 +30,8 @@ const ChatRoom = () => {
 
   const handleSend = () => {
     if (!text.trim()) return;
-    sendMessage(roomId, text);
+
+    sendMessage(roomId, text, currentUser); // Pass currentUser to sendMessage
     setText("");
   };
 
@@ -60,7 +63,8 @@ const ChatRoom = () => {
       {/* Messages */}
       <div className="flex-1 min-h-0 overflow-y-auto px-4 py-6 space-y-4">
         {messages.map((m) => {
-          const isMe = m.sender === "me";
+          const isMe = m.senderId === currentUser.id; // Dynamic current user check
+
           return (
             <div
               key={m.id}
@@ -70,8 +74,8 @@ const ChatRoom = () => {
               {!isMe && (
                 <div className="mr-3 flex-shrink-0">
                   <Avatar className="h-10 w-10">
-                    <AvatarImage src={room.user.avatarUrl} />
-                    <AvatarFallback>{room.user.name.charAt(0)}</AvatarFallback>
+                    <AvatarImage src={m.senderAvatar || room.user.avatarUrl} />
+                    <AvatarFallback>{m.senderName.charAt(0)}</AvatarFallback>
                   </Avatar>
                 </div>
               )}
@@ -134,11 +138,10 @@ const ChatRoom = () => {
 
       {typingByRoom[roomId] && (
         <div className="px-4 py-2 text-sm text-slate-500 italic">
-          Alex is typing…
+          {room.user.name} is typing…
         </div>
       )}
 
-      {/* Input */}
       {/* Input */}
       <div className="p-3 border-t border-slate-200 bg-white flex gap-2 items-center">
         <input
