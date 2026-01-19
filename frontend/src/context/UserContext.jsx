@@ -6,9 +6,9 @@ const UserContext = createContext();
 export const UserProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState({
     id: "me",
-    name: "Alex",
+    name: "Taylor",
     status: "Explorer 🧭",
-    avatarUrl: null, // no backend yet
+    avatarUrl: "https://images.unsplash.com/photo-1699524826369-57870e627c43", // no backend yet
   });
 
   return (

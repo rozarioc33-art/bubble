@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { PencilIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { useUser } from "@/context/UserContext";
 
 const ProfilePage = ({ onClose }) => {
   const { currentUser, setCurrentUser } = useUser();
+  const [imgError, setImgError] = useState(false);
+
   return (
     <div className="h-full w-full flex flex-col bg-white">
       {/* Header */}
@@ -24,18 +26,30 @@ const ProfilePage = ({ onClose }) => {
         {/* Avatar */}
         <div className="flex flex-col items-center mb-8">
           <div className="relative">
-            <div className="w-28 h-28 rounded-full bg-gradient-to-br from-violet-400 to-pink-400 flex items-center justify-center text-white text-4xl font-semibold">
-              J
-            </div>
+            {currentUser?.avatarUrl && !imgError ? (
+              <img
+                src={currentUser.avatarUrl}
+                alt={currentUser.name}
+                onError={() => setImgError(true)}
+                className="w-28 h-28 rounded-full object-cover"
+              />
+            ) : (
+              <div className="w-28 h-28 rounded-full bg-gradient-to-br from-violet-400 to-pink-400 flex items-center justify-center text-white text-4xl font-semibold">
+                {currentUser?.name?.charAt(0).toUpperCase()}
+              </div>
+            )}
+
             <button className="absolute bottom-1 right-1 bg-white p-2 rounded-full shadow">
               <PencilIcon className="w-4 h-4 text-slate-600" />
             </button>
           </div>
 
           <h3 className="mt-4 text-xl font-semibold text-slate-900">
-            John Doe
+            {currentUser.name}
           </h3>
-          <p className="text-sm text-slate-500">Explorer 🧭</p>
+          <p className="text-sm text-slate-500">
+            {currentUser.status || "Available"}
+          </p>
         </div>
 
         {/* Info Section */}
@@ -50,7 +64,7 @@ const ProfilePage = ({ onClose }) => {
                 setCurrentUser({ ...currentUser, name: e.target.value })
               }
               className="w-full px-4 py-3 rounded-xl bg-slate-100
-  focus:outline-none focus:ring-2 focus:ring-violet-300"
+              focus:outline-none focus:ring-2 focus:ring-violet-300"
             />
           </div>
 
@@ -64,7 +78,7 @@ const ProfilePage = ({ onClose }) => {
                 setCurrentUser({ ...currentUser, status: e.target.value })
               }
               className="w-full px-4 py-3 rounded-xl bg-slate-100
-  focus:outline-none focus:ring-2 focus:ring-violet-300"
+              focus:outline-none focus:ring-2 focus:ring-violet-300"
             />
           </div>
         </div>
