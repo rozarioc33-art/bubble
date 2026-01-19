@@ -1,60 +1,73 @@
 import React from "react";
+import { PencilIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 
 const ProfilePage = ({ onClose }) => {
   return (
-    <div className="h-full w-full flex flex-col bg-gray-50">
-      <div className="flex items-center justify-between p-4 border-b">
-        <h2 className="font-semibold text-lg">Profile</h2>
+    <div className="h-full w-full flex flex-col bg-white">
+      {/* Header */}
+      <div className="flex items-center gap-3 p-4 border-b">
         {onClose && (
-          <button onClick={onClose} className="p-2 rounded hover:bg-gray-200">
-            ✕
+          <button
+            onClick={onClose}
+            className="p-2 rounded-full hover:bg-slate-100"
+          >
+            <ArrowLeftIcon className="w-5 h-5" />
           </button>
         )}
+        <h2 className="font-semibold text-lg">Profile</h2>
       </div>
-      <div className="max-w-md mx-auto p-6">
-        {/* Avatar Placeholder */}
-        <div className="w-24 h-24 rounded-full bg-gray-200 mb-6 mx-auto flex items-center justify-center">
-          <svg
-            className="w-10 h-10 text-gray-400"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-            />
-          </svg>
+
+      {/* Content */}
+      <div className="flex-1 overflow-y-auto px-6 py-8">
+        {/* Avatar */}
+        <div className="flex flex-col items-center mb-8">
+          <div className="relative">
+            <div className="w-28 h-28 rounded-full bg-gradient-to-br from-violet-400 to-pink-400 flex items-center justify-center text-white text-4xl font-semibold">
+              J
+            </div>
+            <button className="absolute bottom-1 right-1 bg-white p-2 rounded-full shadow">
+              <PencilIcon className="w-4 h-4 text-slate-600" />
+            </button>
+          </div>
+
+          <h3 className="mt-4 text-xl font-semibold text-slate-900">
+            John Doe
+          </h3>
+          <p className="text-sm text-slate-500">Explorer 🧭</p>
         </div>
 
-        {/* Display Name Input */}
-        <input
-          type="text"
-          placeholder="Display Name"
-          defaultValue="John Doe"
-          className="w-full p-3 border rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+        {/* Info Section */}
+        <div className="space-y-5">
+          <div>
+            <label className="block text-xs font-medium text-slate-500 mb-1">
+              Display name
+            </label>
+            <input
+              defaultValue="John Doe"
+              className="w-full px-4 py-3 rounded-xl bg-slate-100 focus:outline-none focus:ring-2 focus:ring-violet-300"
+            />
+          </div>
 
-        {/* Status Input */}
-        <input
-          type="text"
-          placeholder="Status"
-          defaultValue="Available"
-          className="w-full p-3 border rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+          <div>
+            <label className="block text-xs font-medium text-slate-500 mb-1">
+              Status
+            </label>
+            <input
+              defaultValue="Available"
+              className="w-full px-4 py-3 rounded-xl bg-slate-100 focus:outline-none focus:ring-2 focus:ring-violet-300"
+            />
+          </div>
+        </div>
 
-        {/* Save Button */}
-        <button className="w-full py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors mb-6">
-          Save
-        </button>
+        {/* Actions */}
+        <div className="mt-10 space-y-4">
+          <button className="w-full py-3 rounded-xl bg-gradient-to-br from-violet-400 to-pink-400 text-white font-medium hover:opacity-90">
+            Save changes
+          </button>
 
-        {/* Log Out Link */}
-        <div className="text-center text-sm text-gray-600">
-          <a href="/login" className="hover:text-gray-800 transition-colors">
+          <button className="w-full py-3 rounded-xl text-red-500 hover:bg-red-50">
             Log out
-          </a>
+          </button>
         </div>
       </div>
     </div>
