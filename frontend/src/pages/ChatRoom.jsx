@@ -54,7 +54,13 @@ const ChatRoom = () => {
         <div className="flex flex-col leading-tight">
           <span className="font-semibold text-slate-900">{room.user.name}</span>
 
-          <span className="text-xs text-violet-700 bg-violet-100 px-2 py-0.5 rounded-full inline-flex items-center gap-1">
+          <span
+            className="inline-flex items-center gap-1 self-start
+  text-[11px] font-medium
+  text-violet-600 bg-violet-100/70
+  px-2 py-0.5 rounded-full
+"
+          >
             Explorer 🧭
           </span>
         </div>
