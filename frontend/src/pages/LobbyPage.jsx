@@ -107,7 +107,13 @@ const LobbyPage = ({ onOpenProfile }) => {
           </button>
           <button
             className="flex-1 p-2 text-center hover:bg-slate-100 rounded-lg"
-            onClick={() => navigate("/profile")}
+            onClick={() => {
+              if (isDesktop) {
+                onOpenProfile();
+              } else {
+                navigate("/profile");
+              }
+            }}
           >
             👤
           </button>

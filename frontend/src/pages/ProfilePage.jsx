@@ -1,10 +1,24 @@
 import React, { useState } from "react";
 import { PencilIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { useUser } from "@/context/UserContext";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useMediaQuery } from "react-responsive";
 
 const ProfilePage = ({ onClose }) => {
   const { currentUser, setCurrentUser } = useUser();
   const [imgError, setImgError] = useState(false);
+  const navigate = useNavigate();
+  const isDesktop = useMediaQuery({ minWidth: 768 });
+
+  useEffect(() => {
+    if (isDesktop && !onClose) {
+      navigate("/chat", {
+        replace: true,
+        state: { openProfile: true },
+      });
+    }
+  }, [isDesktop, navigate, onClose]);
 
   return (
     <div className="h-full w-full flex flex-col bg-white">

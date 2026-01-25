@@ -7,6 +7,8 @@ import {
   useParams,
 } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
@@ -20,7 +22,26 @@ import EmptyChat from "./pages/EmptyChat";
 const ChatLayout = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const isDesktop = useMediaQuery({ minWidth: 768 });
+  const location = useLocation();
+  const navigate = useNavigate();
   const { id } = useParams();
+
+  useEffect(() => {
+    if (isDesktop && location.state?.openProfile) {
+      setIsProfileOpen(true);
+
+      // clear state so it doesn't reopen on refresh
+      navigate(location.pathname, {
+        replace: true,
+        state: {},
+      });
+    }
+
+    // close profile panel if switching to mobile
+    if (!isDesktop) {
+      setIsProfileOpen(false);
+    }
+  }, [isDesktop, location.state, navigate, location.pathname]);
 
   return (
     <div className="h-[100dvh] w-full flex overflow-hidden">
