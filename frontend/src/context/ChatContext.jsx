@@ -10,7 +10,7 @@ const DEFAULT_ROOMS = [
     user: {
       id: "u1",
       name: "Alex",
-      avatarUrl: "https://github.com/shadcn.png",
+      avatarUrl: "https://cdn.jsdelivr.net/gh/alohe/avatars/png/memo_1.png",
       isOnline: true,
     },
     lastMessage: "",
@@ -22,7 +22,7 @@ const DEFAULT_ROOMS = [
     user: {
       id: "u2",
       name: "Chris",
-      avatarUrl: "https://images.unsplash.com/photo-1728577740843-5f29c7586afe",
+      avatarUrl: "https://cdn.jsdelivr.net/gh/alohe/avatars/png/memo_5.png",
       isOnline: false,
     },
     lastMessage: "",
@@ -34,7 +34,7 @@ const DEFAULT_ROOMS = [
     user: {
       id: "u3",
       name: "Taylor",
-      avatarUrl: "https://images.unsplash.com/photo-1699524826369-57870e627c43",
+      avatarUrl: "https://cdn.jsdelivr.net/gh/alohe/avatars/png/memo_26.png",
       isOnline: false,
     },
     lastMessage: "",
@@ -46,8 +46,7 @@ const DEFAULT_ROOMS = [
     user: {
       id: "u4",
       name: "Casey",
-      avatarUrl:
-        "https://plus.unsplash.com/premium_photo-1739283664366-abb2b1c6f218",
+      avatarUrl: "https://cdn.jsdelivr.net/gh/alohe/avatars/png/memo_24.png",
       isOnline: true,
     },
     lastMessage: "",
@@ -59,7 +58,7 @@ const DEFAULT_ROOMS = [
     user: {
       id: "u5",
       name: "Jamie",
-      avatarUrl: "https://images.unsplash.com/photo-1655650876167-ebaf308495a5",
+      avatarUrl: "https://cdn.jsdelivr.net/gh/alohe/avatars/png/memo_9.png",
       isOnline: false,
     },
     lastMessage: "",
