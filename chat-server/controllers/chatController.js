@@ -3,13 +3,8 @@ import Chat from "../models/Chat.js";
 export const createOrGetChat = async (req, res) => {
   const { userId } = req.body;
 
-  console.log("👉 Logged-in user:", req.user._id);
-  console.log("👉 Requested userId:", userId);
-
   // 1️⃣ Check if chat already exists
   let chat = await Chat.findOne({isGroup: false, users: {$all: [req.user._id, userId]}});
-
-  console.log("👉 Chat found:", chat);
 
   if (chat) {
     return res.status(200).json(chat);
@@ -27,3 +22,18 @@ export const createOrGetChat = async (req, res) => {
 
   res.status(201).json(fullChat);
 };
+
+export const getMyChats = async (req, res) => {
+  try {
+    const chats = await Chat.find({
+      users: {$in: [req.user._id]}
+    })
+      .populate("users", "-password")
+      .populate("lastMessage")
+      .sort({updatedAt: -1})
+
+      res.status(200).json(chats);
+  } catch (error) {
+     res.status(500).json({ message: error.message });
+  }
+}
