@@ -28,8 +28,14 @@ export const getMyChats = async (req, res) => {
     const chats = await Chat.find({
       users: {$in: [req.user._id]}
     })
-      .populate("users", "-password")
-      .populate("lastMessage")
+      .populate("users", "name email")
+      .populate({
+        path: "lastMessage",
+        populate: {
+          path: "sender",
+          select: "name email",
+        },
+      })
       .sort({updatedAt: -1})
 
       res.status(200).json(chats);
