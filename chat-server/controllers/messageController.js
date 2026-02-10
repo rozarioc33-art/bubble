@@ -9,6 +9,16 @@ export const sendMessage = async (req, res) => {
             return res.status(400).json({message: "content and chatId required"});
         }
 
+        const chat = await Chat.findById(chatId);
+
+        if (!chat) {
+          return res.status(404).json({message: "Chat not found"});
+        }
+
+        if (!chat.users.includes(req.user._id)) {
+          return res.status(403).json({message: "Not authorized"});
+        }
+
         let message = await Message.create({
             sender: req.user._id,
             content,
@@ -31,6 +41,16 @@ export const sendMessage = async (req, res) => {
 export const getMessages = async (req, res) => {
   try {
     const { chatId } = req.params;
+
+    const chat = await Chat.findById(chatId);
+
+    if (!chat) {
+      return res.status(404).json({ message: "Chat not found" });
+    }
+
+    if (!chat.users.includes(req.user._id)) {
+      return res.status(403).json({ message: "Not authorized" });
+    }
 
     const messages = await Message.find({ chat: chatId })
       .populate("sender", "name email")

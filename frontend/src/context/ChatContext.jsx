@@ -28,18 +28,7 @@ const DEFAULT_ROOMS = [
     lastMessage: "",
     lastMessageAt: null,
   },
-  {
-    id: "3",
-    type: "dm",
-    user: {
-      id: "u3",
-      name: "Taylor",
-      avatarUrl: "https://cdn.jsdelivr.net/gh/alohe/avatars/png/memo_26.png",
-      isOnline: false,
-    },
-    lastMessage: "",
-    lastMessageAt: null,
-  },
+
   {
     id: "4",
     type: "dm",

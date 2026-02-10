@@ -14,18 +14,29 @@ export function ChatCard({ room, onClick, unreadCount, timestamp }) {
     <Card
       onClick={onClick}
       className="
-        w-full cursor-pointer
-    rounded-2xl shadow-sm
+    w-full cursor-pointer
+    rounded-2xl
     border border-slate-200
-      "
+    shadow-sm
+    transition-all duration-200
+    hover:shadow-md hover:border-violet-200
+    hover:bg-violet-50/40
+  "
     >
       <CardContent className="flex items-center gap-4 p-4">
         {/* Avatar */}
-        <Avatar className="h-12 w-12 ring-2 ring-violet-200">
-          <AvatarImage src={room.user.avatarUrl} alt={room.user.name} />
-          <AvatarFallback className="bg-indigo-100 text-indigo-600 font-semibold">
-            {room.user.name[0]}
-          </AvatarFallback>
+        {/* Avatar */}
+        <Avatar className="h-12 w-12 p-[2px] rounded-full bg-gradient-to-br from-violet-400 to-pink-400">
+          <div className="h-full w-full rounded-full bg-white flex items-center justify-center">
+            <AvatarImage
+              src={room.user.avatarUrl}
+              alt={room.user.name}
+              className="rounded-full object-cover"
+            />
+            <AvatarFallback className="bg-slate-100 text-slate-700 font-semibold">
+              {room.user.name[0]}
+            </AvatarFallback>
+          </div>
         </Avatar>
 
         {/* Text */}
@@ -48,7 +59,17 @@ export function ChatCard({ room, onClick, unreadCount, timestamp }) {
             </span>
 
             {unreadCount > 0 && (
-              <Badge className="bg-violet-100 text-violet-700 border border-violet-300 text-xs">
+              <Badge
+                className="
+    bg-violet-100 text-violet-700
+    border border-violet-300
+    text-xs shadow-sm
+    transition-all duration-200
+    hover:bg-violet-200 hover:border-violet-400
+    group-hover:bg-violet-200
+    group-hover:border-violet-400
+  "
+              >
                 {unreadCount}
               </Badge>
             )}

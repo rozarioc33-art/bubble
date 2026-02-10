@@ -8,7 +8,7 @@ export const UserProvider = ({ children }) => {
     id: "me",
     name: "Taylor",
     status: "Explorer 🧭",
-    avatarUrl: "https://cdn.jsdelivr.net/gh/alohe/avatars/png/memo_26.png",
+    avatarUrl: "https://cdn.jsdelivr.net/gh/alohe/avatars/png/memo_5.png",
   });
 
   return (
