@@ -9,6 +9,7 @@ import authRoutes from "./routes/authRoutes.js";
 
 import { Server } from "socket.io";
 import http from "http";
+import { Socket } from "dgram";
 
 dotenv.config();
 
@@ -24,6 +25,19 @@ const io = new Server(server, {
   }
 });
 
+io.on("connection", (socket) => {
+  console.log("Socket connected:", socket.id);
+
+  Socket.on("setup", (userId) => {
+    socket.join(userId);
+    console.log("User joined room:", userId);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("Socket disconnected", socket.id);
+  });
+});
+
 app.use(cors());
 app.use(express.json());
 
@@ -33,18 +47,18 @@ app.use("/api/messages", messageRoutes);
 app.use("/api/auth", authRoutes);
 
 app.get("/", (req, res) => {
-  res.send("API running 🚀");
+  res.send("API running");
 });
 
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
-    console.log("✅ MongoDB connected");
+    console.log("MongoDB connected");
 
-    app.listen(PORT, () => {
-      console.log(`🚀 Server running on http://localhost:${PORT}`);
+    server.listen(PORT, () => {
+      console.log(`Server + Socket.IO running on http://localhost:${PORT}`);
     });
   })
   .catch((err) => {
-    console.error("❌ MongoDB connection error:", err);
+    console.error("MongoDB connection error:", err);
   });
