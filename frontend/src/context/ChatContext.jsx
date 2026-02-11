@@ -10,7 +10,7 @@ const DEFAULT_ROOMS = [
     user: {
       id: "u1",
       name: "Alex",
-      avatarUrl: "https://cdn.jsdelivr.net/gh/alohe/avatars/png/memo_1.png",
+      avatarUrl: "https://cdn.jsdelivr.net/gh/alohe/avatars/png/memo_23.png",
       isOnline: true,
     },
     lastMessage: "",

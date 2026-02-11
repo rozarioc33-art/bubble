@@ -32,6 +32,14 @@ export const sendMessage = async (req, res) => {
         message = await message.populate("sender", "name email");
         message = await message.populate("chat");
 
+        const io = req.app.get("io");
+
+        chat.users.forEach((user) => {
+          if (user._id.toString() === req.user._id.toString()) return;
+
+          io.to(user._id.toString()).emit("message received", message);
+        });
+
         res.status(201).json(message);
     } catch (error) {
         res.status(500).json({message: error.message});

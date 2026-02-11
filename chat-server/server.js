@@ -9,7 +9,6 @@ import authRoutes from "./routes/authRoutes.js";
 
 import { Server } from "socket.io";
 import http from "http";
-import { Socket } from "dgram";
 
 dotenv.config();
 
@@ -25,10 +24,12 @@ const io = new Server(server, {
   }
 });
 
+app.set("io", io);
+
 io.on("connection", (socket) => {
   console.log("Socket connected:", socket.id);
 
-  Socket.on("setup", (userId) => {
+  socket.on("setup", (userId) => {
     socket.join(userId);
     console.log("User joined room:", userId);
   });
