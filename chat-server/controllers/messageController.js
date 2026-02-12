@@ -29,7 +29,7 @@ export const sendMessage = async (req, res) => {
           lastMessage: message._id,
         });
 
-        message = await message.populate("sender", "name email");
+        message = await message.populate("sender", "name email avatarUrl");
         message = await message.populate("chat");
 
         const io = req.app.get("io");
@@ -61,7 +61,7 @@ export const getMessages = async (req, res) => {
     }
 
     const messages = await Message.find({ chat: chatId })
-      .populate("sender", "name email")
+      .populate("sender", "name email avatarUrl")
       .populate("chat");
 
     res.status(200).json(messages);
