@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useContext } from "react";
 
 export const ChatProvider = ({ children }) => {
   const socket = useRef(null);
@@ -110,3 +111,5 @@ export const ChatProvider = ({ children }) => {
     </ChatContext.Provider>
   );
 };
+
+export const useChat = () => useContext(ChatContext);
