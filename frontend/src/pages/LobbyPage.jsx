@@ -11,14 +11,18 @@ const LobbyPage = ({ onOpenProfile }) => {
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
   const { rooms = [], getUnreadCount } = useChat();
-
-  const users = rooms.map((room) => room.user);
-
   const { currentUser } = useUser();
 
+  const users = rooms.map((room) =>
+    room.users?.find((u) => u._id !== currentUser?._id),
+  );
+
   const filteredRooms = rooms.filter((room) => {
-    const name = room.user.name.toLowerCase();
-    const lastMessage = room.lastMessage?.toLowerCase() || "";
+    const otherUser = room.users?.find((u) => u._id !== currentUser?._id);
+
+    const name = otherUser?.name?.toLowerCase() || "";
+
+    const lastMessage = room.lastMessage?.content?.toLowerCase() || "";
 
     return (
       name.includes(query.toLowerCase()) ||
@@ -71,15 +75,15 @@ const LobbyPage = ({ onOpenProfile }) => {
         {/* Scrollable Room List */}
         <div className="flex-1 overflow-auto px-4 bg-white border-r border-slate-200">
           {filteredRooms.map((room) => {
-            const unreadCount = getUnreadCount(room.id);
+            const unreadCount = getUnreadCount(room._id);
 
             return (
               <ChatCard
-                key={room.id}
+                key={room._id}
                 room={room}
                 unreadCount={unreadCount}
                 timestamp={room.lastMessageAt}
-                onClick={() => navigate(`/chat/${room.id}`)}
+                onClick={() => navigate(`/chat/${room._id}`)}
               />
             );
           })}
