@@ -1,227 +1,91 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import axios from "axios";
 import { useUser } from "./UserContext";
 
 const ChatContext = createContext();
 
-const DEFAULT_ROOMS = [
-  {
-    id: "1",
-    type: "dm",
-    user: {
-      id: "u1",
-      name: "Alex",
-      avatarUrl: "https://cdn.jsdelivr.net/gh/alohe/avatars/png/memo_23.png",
-      isOnline: true,
-    },
-    lastMessage: "",
-    lastMessageAt: null,
-  },
-  {
-    id: "2",
-    type: "dm",
-    user: {
-      id: "u2",
-      name: "Chris",
-      avatarUrl: "https://cdn.jsdelivr.net/gh/alohe/avatars/png/memo_5.png",
-      isOnline: false,
-    },
-    lastMessage: "",
-    lastMessageAt: null,
-  },
-
-  {
-    id: "4",
-    type: "dm",
-    user: {
-      id: "u4",
-      name: "Casey",
-      avatarUrl: "https://cdn.jsdelivr.net/gh/alohe/avatars/png/memo_24.png",
-      isOnline: true,
-    },
-    lastMessage: "",
-    lastMessageAt: null,
-  },
-  {
-    id: "5",
-    type: "dm",
-    user: {
-      id: "u5",
-      name: "Jamie",
-      avatarUrl: "https://cdn.jsdelivr.net/gh/alohe/avatars/png/memo_9.png",
-      isOnline: false,
-    },
-    lastMessage: "",
-    lastMessageAt: null,
-  },
-];
-
 export const ChatProvider = ({ children }) => {
   const { currentUser } = useUser();
-  const [typingByRoom, setTypingByRoom] = useState({});
-  const [rooms, setRooms] = useState(() => {
-    try {
-      const saved = localStorage.getItem("rooms");
 
-      if (!saved) {
-        return DEFAULT_ROOMS;
-      }
+  const [rooms, setRooms] = useState([]);
+  const [messagesByRoom, setMessagesByRoom] = useState({});
 
-      const parsed = JSON.parse(saved);
+  const token = localStorage.getItem("token");
 
-      if (!Array.isArray(parsed)) {
-        return DEFAULT_ROOMS;
-      }
-
-      return parsed.map((room, i) => ({
-        ...DEFAULT_ROOMS[i],
-        ...room,
-        user: {
-          ...DEFAULT_ROOMS[i]?.user,
-          ...room.user,
-        },
-      }));
-    } catch (error) {
-      console.error("Failed to parse saved rooms:", error);
-      return DEFAULT_ROOMS;
-    }
-  });
-
-  const [messagesByRoom, setMessagesByRoom] = useState(() => {
-    try {
-      const saved = localStorage.getItem("messagesByRoom");
-      return saved ? JSON.parse(saved) : {};
-    } catch (err) {
-      console.error("Failed to parse saved messagesByRoom:", err);
-      return {};
-    }
-  });
-
-  const receiveMessage = (roomId, text) => {
-    setTypingByRoom((prev) => ({ ...prev, [roomId]: false }));
-
-    const room = rooms.find((r) => r.id === roomId);
-    if (!room) return;
-
-    const newMessage = {
-      id: Date.now(),
-      roomId,
-      text,
-      senderId: room.user.id,
-      senderName: room.user.name,
-      senderAvatar: room.user.avatarUrl,
-      timestamp: Date.now(),
-      status: "delivered",
-    };
-
-    setMessagesByRoom((prev) => ({
-      ...prev,
-      [roomId]: [...(prev[roomId] || []), newMessage],
-    }));
-
-    setRooms((prev) =>
-      prev.map((room) =>
-        room.id === roomId
-          ? {
-              ...room,
-              lastMessage: text,
-              lastMessageAt: newMessage.timestamp,
-            }
-          : room,
-      ),
-    );
+  const authConfig = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   };
 
-  const sendMessage = (roomId, text) => {
-    const newMessage = {
-      id: Date.now(),
-      roomId,
-      text,
-      senderId: currentUser.id,
-      senderName: currentUser.name,
-      senderAvatar: currentUser.avatarUrl,
-      timestamp: Date.now(),
-      status: "sent",
+  // ==============================
+  // 1️⃣ Fetch Chats
+  // ==============================
+  useEffect(() => {
+    const fetchChats = async () => {
+      try {
+        const { data } = await axios.get(
+          "http://localhost:5000/api/chats",
+          authConfig,
+        );
+        console.log("rooms:", data);
+        setRooms(data);
+      } catch (err) {
+        console.error("Failed to fetch chats:", err);
+      }
     };
 
-    setMessagesByRoom((prev) => ({
-      ...prev,
-      [roomId]: [...(prev[roomId] || []), newMessage],
-    }));
+    if (currentUser) {
+      fetchChats();
+    }
+  }, [currentUser]);
 
-    setRooms((prev) =>
-      prev.map((room) =>
-        room.id === roomId
-          ? {
-              ...room,
-              lastMessage: text,
-              lastMessageAt: newMessage.timestamp,
-            }
-          : room,
-      ),
-    );
+  // ==============================
+  // 2️⃣ Fetch Messages For Chat
+  // ==============================
+  const fetchMessages = async (chatId) => {
+    try {
+      const { data } = await axios.get(
+        `http://localhost:5000/api/messages/${chatId}`,
+        authConfig,
+      );
 
-    setTimeout(() => {
-      setTypingByRoom((prev) => ({
-        ...prev,
-        [roomId]: true,
-      }));
-    }, 800);
-
-    setTimeout(() => {
       setMessagesByRoom((prev) => ({
         ...prev,
-        [roomId]: prev[roomId].map((m) =>
-          m.id === newMessage.id ? { ...m, status: "delivered" } : m,
-        ),
+        [chatId]: data,
       }));
-    }, 1000);
-
-    setTimeout(() => {
-      receiveMessage(roomId, "Okay");
-    }, 2000);
-  };
-
-  const markRoomAsRead = (roomId) => {
-    setMessagesByRoom((prev) => ({
-      ...prev,
-      [roomId]: (prev[roomId] || []).map((m) =>
-        m.status === "delivered" ? { ...m, status: "read" } : m,
-      ),
-    }));
-  };
-
-  const getUnreadCount = (roomId) => {
-    return (messagesByRoom[roomId] || []).filter(
-      (m) => m.sender !== "me" && m.status === "delivered",
-    ).length;
-  };
-
-  useEffect(() => {
-    try {
-      localStorage.setItem("messagesByRoom", JSON.stringify(messagesByRoom));
-    } catch (error) {
-      console.error("Failed to save messages:", error);
+    } catch (err) {
+      console.error("Failed to fetch messages:", err);
     }
-  }, [messagesByRoom]);
+  };
 
-  useEffect(() => {
+  // ==============================
+  // 3️⃣ Send Message
+  // ==============================
+  const sendMessage = async (chatId, content) => {
     try {
-      localStorage.setItem("rooms", JSON.stringify(rooms));
-    } catch (error) {
-      console.error("Failed to save rooms:", error);
+      const { data } = await axios.post(
+        "http://localhost:5000/api/messages",
+        { chatId, content },
+        authConfig,
+      );
+
+      setMessagesByRoom((prev) => ({
+        ...prev,
+        [chatId]: [...(prev[chatId] || []), data],
+      }));
+    } catch (err) {
+      console.error("Failed to send message:", err);
     }
-  }, [rooms]);
+  };
 
   return (
     <ChatContext.Provider
       value={{
         rooms,
         messagesByRoom,
+        fetchMessages,
         sendMessage,
-        receiveMessage,
-        markRoomAsRead,
-        getUnreadCount,
-        typingByRoom,
       }}
     >
       {children}

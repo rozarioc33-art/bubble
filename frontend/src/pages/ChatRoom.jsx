@@ -16,7 +16,7 @@ const ChatRoom = () => {
   const bottomRef = useRef(null);
 
   const messages = messagesByRoom[roomId] || [];
-  const room = rooms.find((r) => r.id === roomId);
+  const room = rooms.find((r) => r._id === roomId);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -42,17 +42,23 @@ const ChatRoom = () => {
     }
   };
 
+  if (!room) return null;
+
+  const otherUser = room.users?.find((u) => u._id !== currentUser?._id);
+
   return (
     <div className="h-full w-full flex flex-col bg-slate-50 min-h-0">
       {/* Header */}
       <div className="p-4 border-b border-slate-200 bg-white/80 backdrop-blur-sm flex items-center gap-3">
         <Avatar className="h-9 w-9 ring-2 ring-violet-200">
-          <AvatarImage src={room.user.avatarUrl} />
-          <AvatarFallback>{room.user.name.charAt(0)}</AvatarFallback>
+          <AvatarImage src={otherUser?.avatarUrl} />
+          <AvatarFallback>{otherUser?.name?.charAt(0)}</AvatarFallback>
         </Avatar>
 
         <div className="flex flex-col leading-tight">
-          <span className="font-semibold text-slate-900">{room.user.name}</span>
+          <span className="font-semibold text-slate-900">
+            {otherUser?.name}
+          </span>
 
           <span
             className="inline-flex items-center gap-1 self-start
@@ -69,19 +75,19 @@ const ChatRoom = () => {
       {/* Messages */}
       <div className="flex-1 min-h-0 overflow-y-auto px-4 py-6 space-y-4">
         {messages.map((m) => {
-          const isMe = m.senderId === currentUser.id; // Dynamic current user check
+          const isMe = m.sender?._id === currentUser?._id;
 
           return (
             <div
-              key={m.id}
+              key={m._id}
               className={`flex ${isMe ? "justify-end" : "justify-start"}`}
             >
               {/* Avatar */}
               {!isMe && (
                 <div className="mr-3 flex-shrink-0">
                   <Avatar className="h-10 w-10">
-                    <AvatarImage src={m.senderAvatar || room.user.avatarUrl} />
-                    <AvatarFallback>{m.senderName.charAt(0)}</AvatarFallback>
+                    <AvatarImage src={m.sender?.avatarUrl} />
+                    <AvatarFallback>{m.sender?.name?.charAt(0)}</AvatarFallback>
                   </Avatar>
                 </div>
               )}
@@ -106,7 +112,7 @@ const ChatRoom = () => {
         : "bg-violet-50 text-violet-900 rounded-bl-md border border-violet-100"
     }`}
                 >
-                  <p className="text-sm leading-relaxed">{m.text}</p>
+                  <p className="text-sm leading-relaxed">{m.content}</p>
                 </div>
 
                 {/* Meta */}
@@ -116,7 +122,7 @@ const ChatRoom = () => {
                   }`}
                 >
                   <span className={isMe ? "mr-1" : "ml-1"}>
-                    {new Date(m.timestamp).toLocaleTimeString([], {
+                    {new Date(m.createdAt).toLocaleTimeString([], {
                       hour: "2-digit",
                       minute: "2-digit",
                     })}
