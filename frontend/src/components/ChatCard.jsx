@@ -25,7 +25,7 @@ export function ChatCard({ room, onClick, unreadCount, timestamp }) {
     >
       <CardContent className="flex items-center gap-4 p-4">
         {/* Avatar */}
-        {/* Avatar */}
+
         <Avatar className="h-12 w-12 p-[2px] rounded-full bg-gradient-to-br from-violet-400 to-pink-400">
           <div className="h-full w-full rounded-full bg-white flex items-center justify-center">
             <AvatarImage

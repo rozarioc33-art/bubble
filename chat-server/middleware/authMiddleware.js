@@ -9,9 +9,14 @@ export const protect = async (req, res, next) => {
     req.headers.authorization.startsWith("Bearer")
   ) {
     try {
+        console.log("Authorization header:", req.headers.authorization);
         token = req.headers.authorization.split(" ")[1];
 
+        console.log("Extracted token:", token);
+
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        console.log("Decoded:", decoded);
 
         const user = await User.findById(decoded.id).select("-password");
 
@@ -23,7 +28,9 @@ export const protect = async (req, res, next) => {
         next();
 
     } catch (err) {
-      return res.status(401).json({ message: "Not authorized" });
+      console.log("JWT ERROR:", err.message);
+      res.status(401);
+      throw new Error("Not authorized, token failed");
     }
   }
 

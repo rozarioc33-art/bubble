@@ -33,7 +33,6 @@ const LobbyPage = ({ onOpenProfile }) => {
   return (
     <div className="flex h-full">
       {/* Sidebar for desktop */}
-      {/* Sidebar for desktop */}
       <div className="hidden md:flex flex-col w-20 border-r border-slate-200 items-center py-4 gap-6">
         {/* App logo */}
         <div className="h-10 w-10 rounded-full bg-gradient-to-br from-violet-400 to-pink-400 flex items-center justify-center shadow-md">

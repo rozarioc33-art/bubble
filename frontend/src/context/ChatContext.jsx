@@ -6,28 +6,23 @@ const ChatContext = createContext();
 
 export const ChatProvider = ({ children }) => {
   const { currentUser } = useUser();
+  console.log("current user: ", currentUser);
 
   const [rooms, setRooms] = useState([]);
   const [messagesByRoom, setMessagesByRoom] = useState({});
 
   const token = localStorage.getItem("token");
+  console.log("token: ", token);
 
-  const authConfig = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-
-  // ==============================
   // 1️⃣ Fetch Chats
-  // ==============================
   useEffect(() => {
     const fetchChats = async () => {
       try {
-        const { data } = await axios.get(
-          "http://localhost:5000/api/chats",
-          authConfig,
-        );
+        const { data } = await axios.get("http://localhost:5000/api/chats", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         console.log("rooms:", data);
         setRooms(data);
       } catch (err) {
@@ -40,9 +35,8 @@ export const ChatProvider = ({ children }) => {
     }
   }, [currentUser]);
 
-  // ==============================
   // 2️⃣ Fetch Messages For Chat
-  // ==============================
+
   const fetchMessages = async (chatId) => {
     try {
       const { data } = await axios.get(
@@ -79,6 +73,11 @@ export const ChatProvider = ({ children }) => {
     }
   };
 
+  const getUnreadCount = (roomId) => {
+    const messages = messagesByRoom[roomId] || [];
+    return messages.filter((msg) => !msg.read).length;
+  };
+
   return (
     <ChatContext.Provider
       value={{
@@ -86,6 +85,7 @@ export const ChatProvider = ({ children }) => {
         messagesByRoom,
         fetchMessages,
         sendMessage,
+        getUnreadCount,
       }}
     >
       {children}
