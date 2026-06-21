@@ -6,7 +6,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-export default function Header({ query, onSearchChange }) {
+export default function Header({ query, onSearchChange, onNewChat }) {
   return (
     <header className="flex items-center justify-between p-4 bg-white border-b border-slate-200 z-10">
       {/* Left side */}
@@ -25,7 +25,7 @@ export default function Header({ query, onSearchChange }) {
       {/* Right side actions */}
       <div className="flex items-center gap-2">
         {/* New chat (desktop) */}
-        <button className="hidden md:flex p-2 rounded-lg hover:bg-slate-100">
+        <button onClick={onNewChat}  className="hidden md:flex p-2 rounded-lg hover:bg-slate-100">
           <Plus className="w-5 h-5 text-slate-600" />
         </button>
 
