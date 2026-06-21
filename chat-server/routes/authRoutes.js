@@ -6,3 +6,9 @@ router.post("/register", registerUser);
 router.post("/login", loginUser);
 
 export default router;
+
+// {
+//   "name": "User One",
+//   "email": "user1@test.com",
+//   "password": "123456"
+// }

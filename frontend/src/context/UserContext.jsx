@@ -15,6 +15,18 @@ export const UserProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
+  const register = async (name, email, password) => {
+    const { data } = await API.post("/auth/register", {
+      name,
+      email,
+      password,
+    });
+
+    localStorage.setItem("user", JSON.stringify(data));
+    localStorage.setItem("token", data.token);
+    setCurrentUser(data);
+  };
+
   const login = async (email, password) => {
     const { data } = await API.post("/auth/login", { email, password });
     // Data contains { _id, name, email, token }
@@ -31,7 +43,7 @@ export const UserProvider = ({ children }) => {
 
   return (
     <UserContext.Provider
-      value={{ currentUser, setCurrentUser, login, logout, loading }}
+      value={{ currentUser, setCurrentUser, login, register, logout, loading }}
     >
       {!loading && children}
     </UserContext.Provider>

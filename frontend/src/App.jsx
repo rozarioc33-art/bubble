@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Outlet,
-  useParams,
-} from "react-router-dom";
+import {BrowserRouter, Routes, Route, Outlet, useParams } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
