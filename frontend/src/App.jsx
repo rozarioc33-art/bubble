@@ -11,13 +11,17 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
 import HomePage from "./pages/HomePage";
-import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 import LobbyPage from "./pages/LobbyPage";
 import ChatRoom from "./pages/ChatRoom";
 import ProfilePage from "./pages/ProfilePage";
 import NotFoundPage from "./pages/NotFoundPage";
 import EmptyChat from "./pages/EmptyChat";
+
+import { useUser } from "./context/UserContext";
+import AuthPage from "./pages/AuthPage";
+import { Navigate } from "react-router-dom";
 
 const ChatLayout = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -70,12 +74,14 @@ const ChatLayout = () => {
 };
 
 function App() {
+  const { currentUser } = useUser();
+
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
 
         <Route path="/chat" element={<ChatLayout />}>
           <Route index element={<EmptyChat />} />

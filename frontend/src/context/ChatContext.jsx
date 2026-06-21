@@ -6,13 +6,11 @@ const ChatContext = createContext();
 
 export const ChatProvider = ({ children }) => {
   const { currentUser } = useUser();
-  console.log("current user: ", currentUser);
 
   const [rooms, setRooms] = useState([]);
   const [messagesByRoom, setMessagesByRoom] = useState({});
 
   const token = localStorage.getItem("token");
-  console.log("token: ", token);
 
   // 1️⃣ Fetch Chats
   useEffect(() => {
@@ -23,7 +21,6 @@ export const ChatProvider = ({ children }) => {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log("rooms:", data);
         setRooms(data);
       } catch (err) {
         console.error("Failed to fetch chats:", err);
@@ -53,9 +50,7 @@ export const ChatProvider = ({ children }) => {
     }
   };
 
-  // ==============================
   // 3️⃣ Send Message
-  // ==============================
   const sendMessage = async (chatId, content) => {
     try {
       const { data } = await axios.post(

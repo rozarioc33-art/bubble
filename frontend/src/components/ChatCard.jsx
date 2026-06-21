@@ -29,8 +29,8 @@ export function ChatCard({ room, onClick, unreadCount, timestamp }) {
         <Avatar className="h-12 w-12 p-[2px] rounded-full bg-gradient-to-br from-violet-400 to-pink-400">
           <div className="h-full w-full rounded-full bg-white flex items-center justify-center">
             <AvatarImage
-              src={room.user.avatarUrl}
-              alt={room.user.name}
+              src={room.users.avatarUrl}
+              alt={room.users.name}
               className="rounded-full object-cover"
             />
             <AvatarFallback className="bg-slate-100 text-slate-700 font-semibold">

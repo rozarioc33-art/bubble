@@ -1,19 +1,39 @@
-// src/context/UserContext.jsx
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import API from "@/services/api";
 
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState({
-    id: "me",
-    name: "Taylor",
-    status: "Explorer 🧭",
-    avatarUrl: "https://cdn.jsdelivr.net/gh/alohe/avatars/png/memo_5.png",
-  });
+  const [currentUser, setCurrentUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setCurrentUser(JSON.parse(storedUser));
+    }
+    setLoading(false);
+  }, []);
+
+  const login = async (email, password) => {
+    const { data } = await API.post("/auth/login", { email, password });
+    // Data contains { _id, name, email, token }
+    localStorage.setItem("user", JSON.stringify(data));
+    localStorage.setItem("token", data.token); // Store token for the API interceptor
+    setCurrentUser(data);
+  };
+
+  const logout = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    setCurrentUser(null);
+  };
 
   return (
-    <UserContext.Provider value={{ currentUser, setCurrentUser }}>
-      {children}
+    <UserContext.Provider
+      value={{ currentUser, setCurrentUser, login, logout, loading }}
+    >
+      {!loading && children}
     </UserContext.Provider>
   );
 };

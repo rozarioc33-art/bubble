@@ -20,8 +20,9 @@ const userSchema = new mongoose.Schema(
     },
     avatarUrl: {
       type: String,
-      default: "",
+      default: "https://cdn.jsdelivr.net/gh/alohe/avatars/png/memo_5.png",
     },
+    status: { type: String, default: "Available" },
   },
   { timestamps: true }
 );
