@@ -1,7 +1,14 @@
 import React, { useState } from "react";
-import {BrowserRouter, Routes, Route, Outlet, useParams } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  Outlet,
+  useParams,
+  useLocation,
+  useNavigate,
+  Navigate,
+} from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
-import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
 import HomePage from "./pages/HomePage";
@@ -14,8 +21,16 @@ import NotFoundPage from "./pages/NotFoundPage";
 import EmptyChat from "./pages/EmptyChat";
 
 import { useUser } from "./context/UserContext";
-import AuthPage from "./pages/AuthPage";
-import { Navigate } from "react-router-dom";
+
+const ProtectedRoute = ({ children }) => {
+  const { currentUser } = useUser();
+
+  if (!currentUser) {
+    return <Navigate to="/login" />;
+  }
+
+  return children;
+};
 
 const ChatLayout = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -68,25 +83,27 @@ const ChatLayout = () => {
 };
 
 function App() {
-  const { currentUser } = useUser();
-
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
 
-        <Route path="/chat" element={<ChatLayout />}>
-          <Route index element={<EmptyChat />} />
-          <Route path=":id" element={<ChatRoom />} />
-        </Route>
+      <Route
+        path="/chat"
+        element={
+          <ProtectedRoute>
+            <ChatLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<EmptyChat />} />
+        <Route path=":id" element={<ChatRoom />} />
+      </Route>
 
-        <Route path="/profile" element={<ProfilePage />} />
-
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
-    </BrowserRouter>
+      <Route path="/profile" element={<ProfilePage />} />
+      <Route path="*" element={<NotFoundPage />} />
+    </Routes>
   );
 }
 
