@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import React, { useState} from "react";
 import { useNavigate } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 import Header from "../components/Header";
 import { ChatCard } from "../components/ChatCard";
 import { useChat } from "@/context/ChatContext";
 import { useUser } from "@/context/UserContext";
+import { useEffect } from "react";
+import API from "@/services/api";
 
 const LobbyPage = ({ onOpenProfile }) => {
+  const [showUsers, setShowUsers] = useState(false);
+  const [allUsers, setAllUsers] = useState([]);
+
   const isDesktop = useMediaQuery({ minWidth: 768 });
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
@@ -16,6 +21,13 @@ const LobbyPage = ({ onOpenProfile }) => {
   const users = rooms.map((room) =>
     room.users?.find((u) => u._id !== currentUser?._id),
   );
+
+  const handleNewChat = async () => {
+  setShowUsers(true);
+
+  const { data } = await API.get("/users");
+  setAllUsers(data);
+  };
 
   const filteredRooms = rooms.filter((room) => {
     const otherUser = room.users?.find((u) => u._id !== currentUser?._id);
@@ -65,10 +77,9 @@ const LobbyPage = ({ onOpenProfile }) => {
       <div className="flex-1 flex flex-col gap-4 h-full relative">
         {/* Header */}
         <Header
-          users={users}
-          currentUser={currentUser}
           query={query}
           onSearchChange={setQuery}
+          onNewChat={handleNewChat}
         />
 
         {/* Scrollable Room List */}
